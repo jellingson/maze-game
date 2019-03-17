@@ -1,58 +1,55 @@
-let cell_temp = {
-	pos: {
-		row: 0,
-		col: 0
-	},
-	walls: {
+function Cell(row, col) {
+	this.pos = {
+		row: row,
+		col: col
+	}
+
+	this.walls = {
 		north: true,
 		south: true,
 		east: true,
 		west: true
-	},
-	size: {
+	}
+
+	this.size = {
 		width: "100px",
 		height: "100px"
 	}
 }
 
-function draw_cell(cell) {
-	let maze = document.getElementById("maze");
+Cell.prototype.draw_cell = function() {
 	let div = document.createElement("div");
-
-	
 
 	div.style.float = "left";
 	div.style.boxSizing = "border-box"
 
-	div = draw_cell_walls(div, cell);
-	div = draw_cell_size(div, cell);
-
-	maze.appendChild(div);
-
+	div = this.draw_cell_walls(div);
+	div = this.draw_cell_size(div);
 }
 
-function draw_cell_walls(div, cell) {
+Cell.prototype.draw_cell_walls = function(div) {
 	const border_style = "2px solid black"
-	if (cell.walls.north === true) {
+	if (this.walls.north === true) {
 		div.style.borderTop = border_style;
 	}
-	if (cell.walls.south === true) {
+	if (this.walls.south === true) {
 		div.style.borderBottom = border_style;
 	}
-	if (cell.walls.east === true) {
+	if (this.walls.east === true) {
 		div.style.borderRight = border_style;
 	}
-	if (cell.walls.west === true) {
+	if (this.walls.west === true) {
 		div.style.borderLeft = border_style;
 	}
 
 	return div;
 }
 
-function draw_cell_size(div, cell) {
-	div.style.width = cell.size.width;
-	div.style.height = cell.size.height;
+Cell.prototype.draw_cell_size = function(div) {
+	div.style.width = this.size.width;
+	div.style.height = this.size.height;
 
 	return div;
 }
 
+first_cell = new Cell(0, 0);
