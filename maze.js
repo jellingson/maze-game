@@ -98,6 +98,13 @@ function Maze(rows, cols) {
 	this.numCols = cols;
 	this.cells = [];
 	this.visited = [];
+	this.player = {
+		pos: {
+			row: 0,
+			col: 0
+		},
+		color: "red"
+	}
 }
 
 Maze.prototype.generateCells = function() {
@@ -216,6 +223,7 @@ Maze.prototype.generateMaze = function() {
 	}
 
 	this.drawWalls();
+	this.generatePlayer();
 }
 
 Maze.prototype.drawWalls = function() {
@@ -259,6 +267,55 @@ Maze.prototype.thereAreNotVistedCells = function() {
 	return false;
 }
 
+Maze.prototype.generatePlayer = function() {
+	let player = this.player;
+	let currentCell = this.cells[player.pos.row][player.pos.col];
+	let cellElement = document.getElementById(currentCell.id);
+	let playerElement = document.createElement("div");
+
+	playerElement.style.backgroundColor = player.color;
+	playerElement.style.width = CELL_SIZE - 5 + "px";
+	playerElement.style.height = CELL_SIZE - 5 + "px";
+	playerElement.style.borderRadius = "50%";
+	cellElement.appendChild(playerElement)
+
+}
+
+Maze.prototype.movePlayer = function(keyCode) {
+	// east: 39
+	// west: 37
+	// north: 38
+	// south: 40
+	let valid;
+	let player = this.player;
+	let previousCell = this.cells[player.pos.row][player.pos.col];
+	let cellElement = document.getElementById(previousCell.id);
+	
+	while(cellElement.lastElementChild) {
+		cellElement.removeChild(cellElement.lastElementChild);
+	}
+
+	if(keyCode === 39 && !previousCell.walls.east) {
+		player.pos.col++;
+		valid = true;
+	}
+	if(keyCode === 37 && !previousCell.walls.west) {
+		player.pos.col--;
+		valid = true;
+	}
+	if(keyCode === 38 && !previousCell.walls.north) {
+		player.pos.row--;
+		valid = true;
+	}
+	if(keyCode === 40 && !previousCell.walls.south) {
+		player.pos.row++;
+		valid = true;
+	}
+
+	maze.generatePlayer();
+
+}
+
 function Stack() {
 	this.items = [];
 }
@@ -275,47 +332,6 @@ Stack.prototype.pop = function() {
 	return this.items.pop();
 }
 
-function Player(width, height, color) {
-	this.width = width;
-	this.height = height;
-	this.color = color;
-}
-
-Player.prototype.drawPlayer = function() {
-	let div = document.getElementById("player");
-
-	div.style.backgroundColor = this.color;
-	div.style.width = this.width;
-	div.style.height = this.height;
-	div.style.borderRadius = "50%";
-	div.style.position = "fixed";
-	div.style.left = "5px";
-	div.style.top = "15px";
-
-}
-
-Player.prototype.movePlayer = function(keyCode) {
-	// 37: left
-	// 39: right
-	// 38: up
-	// 40: down
-	let div = document.getElementById("player");
-
-	if(keyCode === 37) {
-		div.style.left = parseInt(div.style.left.substring(0, div.style.left.length -2)) - 3 + "px";
-	}
-	if(keyCode === 39) {
-		div.style.left = parseInt(div.style.left.substring(0, div.style.left.length - 2)) + 3 + "px";
-	}
-	if(keyCode === 38) {
-		div.style.top = parseInt(div.style.top.substring(0, div.style.top.length -2)) - 3 + "px";
-	}
-	if(keyCode === 40) {
-		div.style.top = parseInt(div.style.top.substring(0, div.style.top.length -2)) + 3 + "px";
-	}
-
-	console
-}
 
 function randomBetween(start, end) {
 	return Math.round(Math.random() * (end-start)) + start;
@@ -323,9 +339,7 @@ function randomBetween(start, end) {
 
 
 let maze = new Maze(20,20);
-let player = new Player("20px", "20px", "red");
-player.drawPlayer();
 
 window.onkeydown = function(e) {
-	player.movePlayer(e.keyCode);
+	maze.movePlayer(e.keyCode);
 }
