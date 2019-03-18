@@ -205,13 +205,6 @@ Maze.prototype.generateMaze = function() {
 				curCol--;
 			}
 
-			console.log(currentCell);
-
-			console.log(ranNeighbor);
-
-			console.log('curRow: ' + curRow);
-			console.log('curCol: ' + curCol);
-
 			currentCell = this.cells[curRow][curCol];
 			currentCell.visited = true;
 		} else {
@@ -288,9 +281,51 @@ function Player(width, height, color) {
 	this.color = color;
 }
 
+Player.prototype.drawPlayer = function() {
+	let div = document.getElementById("player");
+
+	div.style.backgroundColor = this.color;
+	div.style.width = this.width;
+	div.style.height = this.height;
+	div.style.borderRadius = "50%";
+	div.style.position = "fixed";
+	div.style.left = "5px";
+	div.style.top = "15px";
+
+}
+
+Player.prototype.movePlayer = function(keyCode) {
+	// 37: left
+	// 39: right
+	// 38: up
+	// 40: down
+	let div = document.getElementById("player");
+
+	if(keyCode === 37) {
+		div.style.left = parseInt(div.style.left.substring(0, div.style.left.length -2)) - 3 + "px";
+	}
+	if(keyCode === 39) {
+		div.style.left = parseInt(div.style.left.substring(0, div.style.left.length - 2)) + 3 + "px";
+	}
+	if(keyCode === 38) {
+		div.style.top = parseInt(div.style.top.substring(0, div.style.top.length -2)) - 3 + "px";
+	}
+	if(keyCode === 40) {
+		div.style.top = parseInt(div.style.top.substring(0, div.style.top.length -2)) + 3 + "px";
+	}
+
+	console
+}
+
 function randomBetween(start, end) {
 	return Math.round(Math.random() * (end-start)) + start;
 }
 
 
 let maze = new Maze(20,20);
+let player = new Player("20px", "20px", "red");
+player.drawPlayer();
+
+window.onkeydown = function(e) {
+	player.movePlayer(e.keyCode);
+}
