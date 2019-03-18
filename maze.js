@@ -247,6 +247,11 @@ Maze.prototype.drawWalls = function() {
 			
 		}
 	}
+
+	cellElement = document.getElementById(this.cells[0][0].id);
+	cellElement.style.borderLeft = "";
+	cellElement = document.getElementById(this.cells[this.numRows-1][this.numCols-1].id);
+	cellElement.style.borderRight = "";
 }
 
 Maze.prototype.thereAreNotVistedCells = function() {
@@ -277,9 +282,15 @@ Stack.prototype.pop = function() {
 	return this.items.pop();
 }
 
+function Player(width, height, color) {
+	this.width = width;
+	this.height = height;
+	this.color = color;
+}
+
 function randomBetween(start, end) {
 	return Math.round(Math.random() * (end-start)) + start;
 }
 
-let maze = new Maze(20,20);
 
+let maze = new Maze(20,20);
