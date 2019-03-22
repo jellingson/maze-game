@@ -1,10 +1,14 @@
 <html>
 <body>
 	<div id="maze"></div>
-	<button onclick="maze.generateMaze()">Generate</button>
+	<button onclick="maze = new Maze(20,20); maze.generateMaze();window.onkeydown = function(e) {maze.movePlayer(e.keyCode);}">Generate</button>
 	<script src="maze.js"></script>
 	<script>
+		let maze = new Maze(20,20);
 		maze.generateMaze();
+		window.onkeydown = function(e) {
+			maze.movePlayer(e.keyCode);
+		}
 	</script>
 </body>
 </html>

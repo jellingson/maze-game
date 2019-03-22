@@ -98,13 +98,7 @@ function Maze(rows, cols) {
 	this.numCols = cols;
 	this.cells = [];
 	this.visited = [];
-	this.player = {
-		pos: {
-			row: 0,
-			col: 0
-		},
-		color: "red"
-	}
+	this.resetPlayer();
 }
 
 Maze.prototype.generateCells = function() {
@@ -223,6 +217,7 @@ Maze.prototype.generateMaze = function() {
 	}
 
 	this.drawWalls();
+	this.resetPlayer();
 	this.generatePlayer();
 }
 
@@ -267,11 +262,31 @@ Maze.prototype.thereAreNotVistedCells = function() {
 	return false;
 }
 
+Maze.prototype.resetPlayer = function() {
+	this.player = {
+		pos: {
+			row: 0,
+			col: 0
+		},
+		color: "red"
+	}
+
+	let playerElement = document.getElementById("player");
+	let parentElement;
+
+	if(playerElement) {
+		parentElement = playerElement.parentElement;
+		parentElement.removeChild(playerElement);
+	} 
+}
+
 Maze.prototype.generatePlayer = function() {
 	let player = this.player;
+
 	let currentCell = this.cells[player.pos.row][player.pos.col];
 	let cellElement = document.getElementById(currentCell.id);
 	let playerElement = document.createElement("div");
+	playerElement.id = "player";
 
 	playerElement.style.backgroundColor = player.color;
 	playerElement.style.width = CELL_SIZE - 5 + "px";
@@ -312,7 +327,7 @@ Maze.prototype.movePlayer = function(keyCode) {
 		valid = true;
 	}
 
-	maze.generatePlayer();
+	this.generatePlayer();
 
 }
 
@@ -335,11 +350,4 @@ Stack.prototype.pop = function() {
 
 function randomBetween(start, end) {
 	return Math.round(Math.random() * (end-start)) + start;
-}
-
-
-let maze = new Maze(20,20);
-
-window.onkeydown = function(e) {
-	maze.movePlayer(e.keyCode);
 }
